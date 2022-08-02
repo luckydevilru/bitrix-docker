@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  web:
+    build:
+      ./conf 
+    volumes:
+      - ./src:/var/www/html
+      - ./conf/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./conf/php/php.ini:/usr/local/etc/php/php.ini
+    ports:
+      - 80:80
+
+  nginx:
+    image: nginx:1.16
+    volumes:
+      - ./src:/var/www/html
+      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+ 
+  mysql:
+    image: mysql:5.7.38
+ #   volumes:
+ #     - ./conf/mysql:/var/lib/mysql 
+ 
+ #   command: bash -c "chmod 644 /var/run/mysqld"
+    environment:
+
+      MYSQL_ROOT_PASSWORD: 0000
+      MYSQL_DATABASE: bitrix
+      MYSQL_USER: bitrix
+      MYSQL_PASSWORD: 1234
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql:db
+    ports:
+      - 8765:80
+    environment:
+      MYSQL_ROOT_PASSWORD: 0000
+      MYSQL_USER: 'bitrix'
+      MYSQL_PASS: '1234'
+    depends_on:
+      - mysql
+      
+ 
+ 
