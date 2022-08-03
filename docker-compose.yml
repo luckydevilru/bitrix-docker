@@ -5,32 +5,37 @@ services:
     build:
       ./conf 
     volumes:
-      - ./src:/var/www/html
+      - ./www:/var/www/html
       - ./conf/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
       - ./conf/php/php.ini:/usr/local/etc/php/php.ini
     ports:
       - 80:80
+    depends_on:
+      - mysql
+      
 
   nginx:
     image: nginx:1.16
     volumes:
-      - ./src:/var/www/html
+      - ./www:/var/www/html
       - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - web
  
   mysql:
-    image: mysql:5.7.38
+    build: 
+      ./conf/mysql
  #   volumes:
  #     - ./conf/mysql:/var/lib/mysql 
  
- #   command: bash -c "chmod 644 /var/run/mysqld"
+ #   command: bash -c "chmod 644 /var/run/mysqld" 
     environment:
-
+      MYSQL_ROOT: 'root'
       MYSQL_ROOT_PASSWORD: 0000
-      MYSQL_DATABASE: bitrix
+      MYSQL_DATABASE: sitemanager
       MYSQL_USER: bitrix
       MYSQL_PASSWORD: 1234
+    command: ['mysqld', '--character-set-server=utf8mb4', '--sql_mode=ONLY_FULL_GROUP_BY,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION', '--collation-server=utf8mb4_unicode_ci']
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -39,6 +44,7 @@ services:
     ports:
       - 8765:80
     environment:
+      MYSQL_ROOT: 'root'
       MYSQL_ROOT_PASSWORD: 0000
       MYSQL_USER: 'bitrix'
       MYSQL_PASS: '1234'

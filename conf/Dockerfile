@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd
 	
-RUN docker-php-ext-install session mysqli json opcache sockets pdo_mysql
+RUN docker-php-ext-install session mysqli json opcache sockets pdo pdo_mysql
+RUN a2enmod rewrite
 
 # + ext lists
 # bcmath bz2 calendar ctype dba dom enchant exif ffi fileinfo filter ftp gd gettext gmp
