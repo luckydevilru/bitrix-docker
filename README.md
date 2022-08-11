@@ -1,5 +1,5 @@
 # bitrix-docker
-php apache nginx mail() for bitrix development
+PHP Apache nginx PHPStorm xDebug localhost for bitrix development
 
 ## Инструкция (для windows)
 Выполнить в консоли:
