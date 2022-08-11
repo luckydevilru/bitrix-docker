@@ -7,7 +7,6 @@ RUN apt-get update \
 	curl \ 
 	libonig-dev \ 
 #	soap \
-#	pdo_mysql \
 	ca-certificates   
 
 # gd
@@ -15,6 +14,7 @@ RUN apt-get update && apt-get install -y \
 		libfreetype6-dev \
 		libjpeg62-turbo-dev \
 		libpng-dev \
+	# && docker-php-ext-configure gd \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd
 	
@@ -36,17 +36,20 @@ COPY ./php/php.ini /etc/php/7.4/fpm/conf.d/90-php.ini
 COPY ./php/php.ini /etc/php/7.4/cli/conf.d/90-php.ini
 COPY ./php/php.ini /usr/local/etc/php/php.ini 
  
-
+RUN > /var/log/php_error.log
+RUN chmod 777 /var/log/php_error.log
 RUN mkdir -p /var/lib/php/session
 RUN chmod 777 /var/lib/php/session
 RUN chown -R www-data:www-data /var/lib/php/session
 
-RUN chown -R www-data:www-data /var/www/html
-RUN find /var/www/html/ -type d -exec chmod 755 {} \; &&\
-    find /var/www/html/ -type f -exec chmod 664 {} \;
+# RUN chown -R root:root /var/www/html
+# RUN find /var/www/html/ -type d -exec chmod 755 {} \; &&\
+#     find /var/www/html/ -type f -exec chmod 664 {} \;
 
 RUN sed -i '/#!\/bin\/sh/aservice sendmail restart' /usr/local/bin/docker-php-entrypoint
 RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).localhost bx.loc" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
+ 
+RUN pecl install && pecl install xdebug-2.8.1 && docker-php-ext-enable xdebug
 
 RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
  
