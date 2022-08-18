@@ -1,0 +1,16 @@
+server {
+    server_name ${VIRTUAL_HOST};
+    root /var/www/html;
+    index index.php;
+
+    location / {
+        try_files ${DOLLAR}uri ${DOLLAR}uri/ /index.php${DOLLAR}is_args${DOLLAR}args;
+    }
+    location ~ \.php$ {
+        fastcgi_pass ${PHP_HOST}:9000;
+        include fastcgi_params;
+
+        fastcgi_param SCRIPT_FILENAME ${DOLLAR}realpath_root${DOLLAR}fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT ${DOLLAR}realpath_root;
+    }
+}

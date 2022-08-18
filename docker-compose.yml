@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     build:
-      ./conf 
+      . 
     volumes:
       - ./www:/var/www/html
       - ./conf/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
@@ -11,6 +11,10 @@ services:
     ports:
       - 22:22
     user: "root:root"
+    extra_hosts:
+      - "bx.doc:127.0.0.1"
+    # dns_search:
+    #   - bx.doc
     depends_on:
       - mysql
     environment:
@@ -18,9 +22,15 @@ services:
       PHP_IDE_CONFIG: "serverName=Docker" 
       
   nginx:
-    image: nginx:1.16
+    # image: nginx:1.16
+    build:
+      ./conf/nginx 
     ports:
       - 80:80
+    extra_hosts:
+      - "bx.doc:127.0.0.1"
+    # dns_search:
+    #   - bx.doc
     volumes: 
       - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
     volumes_from:
@@ -52,6 +62,8 @@ services:
     ports:
       - 8765:80
     restart: always 
+    volumes:
+     - /var/lib/mysql_data:/var/lib/mysql 
     environment:
       MYSQL_ROOT: 'root'
       MYSQL_ROOT_PASSWORD: 0000

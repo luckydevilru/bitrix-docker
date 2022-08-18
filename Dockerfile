@@ -32,9 +32,9 @@ RUN docker-php-ext-enable mysqli  session sockets
 # RUN apt-get install  -y  php-mbstring pdo_mysql
 # DO NOT install php7.4-xdebug package for site running in production! It will slow it down significantly.
 	
-COPY ./php/php.ini /etc/php/7.4/fpm/conf.d/90-php.ini
-COPY ./php/php.ini /etc/php/7.4/cli/conf.d/90-php.ini
-COPY ./php/php.ini /usr/local/etc/php/php.ini 
+COPY ./conf/php/php.ini /etc/php/7.4/fpm/conf.d/90-php.ini
+COPY ./conf/php/php.ini /etc/php/7.4/cli/conf.d/90-php.ini
+COPY ./conf/php/php.ini /usr/local/etc/php/php.ini 
  
 RUN > /var/log/php_error.log
 RUN chmod 777 /var/log/php_error.log
@@ -47,7 +47,8 @@ RUN chown -R www-data:www-data /var/lib/php/session
 #     find /var/www/html/ -type f -exec chmod 664 {} \;
 
 RUN sed -i '/#!\/bin\/sh/aservice sendmail restart' /usr/local/bin/docker-php-entrypoint
-RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).localhost bx.loc" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
+RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).localhost ${VIRTUAL_HOST}" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
+#RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).${VIRTUAL_HOST} ${VIRTUAL_HOST}" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
  
 RUN pecl install && pecl install xdebug-2.8.1 && docker-php-ext-enable xdebug
 
