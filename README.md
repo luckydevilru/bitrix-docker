@@ -3,9 +3,9 @@ PHP Apache nginx PHPStorm xDebug localhost for bitrix development
 
 ## Инструкция (для windows)
 Выполнить в консоли:
-`git clone https://github.com/luckydevilru/bitrix-docker.git`
+`git clone https://github.com/luckydevilru/windock.git`
 
-`cd bitrix-docker`
+`cd windock`
 
 Скопировать из src в www содержимое папки
 
