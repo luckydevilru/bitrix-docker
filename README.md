@@ -1,5 +1,5 @@
 # bitrix-docker
-PHP Apache nginx PHPStorm xDebug localhost for bitrix development
+PHP Apache nginx PHPStorm xDebug localhost for bitrix bitrix24 development
 
 ## Инструкция (для windows)
 Выполнить в консоли:
