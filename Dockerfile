@@ -21,6 +21,18 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-install session mysqli json opcache sockets pdo pdo_mysql
 RUN a2enmod rewrite
 
+ENV APACHE_RUN_USER  www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR   /var/log/apache2
+ENV APACHE_PID_FILE  /var/run/apache2/apache2.pid
+ENV APACHE_RUN_DIR   /var/run/apache2
+ENV APACHE_LOCK_DIR  /var/lock/apache2 
+
+RUN mkdir -p $APACHE_RUN_DIR
+RUN mkdir -p $APACHE_LOCK_DIR
+RUN mkdir -p $APACHE_LOG_DIR
+RUN echo "ServerName 127.0.0.1" >> /etc/apache2/apache2.conf
+
 # + ext lists
 # bcmath bz2 calendar ctype dba dom enchant exif ffi fileinfo filter ftp gd gettext gmp
 # hash iconv  intl  ldap mbstring oci8 odbc pcntl pdo pdo_dblib pdo_firebird
@@ -47,10 +59,10 @@ RUN chown -R www-data:www-data /var/lib/php/session
 #     find /var/www/html/ -type f -exec chmod 664 {} \;
 
 RUN sed -i '/#!\/bin\/sh/aservice sendmail restart' /usr/local/bin/docker-php-entrypoint
-RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).localhost ${VIRTUAL_HOST}" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
-#RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).${VIRTUAL_HOST} ${VIRTUAL_HOST}" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
+#RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).localhost ${VIRTUAL_HOST}" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
  
-RUN pecl install && pecl install xdebug-2.8.1 && docker-php-ext-enable xdebug
+ 
+#RUN pecl install && pecl install xdebug-2.8.1 && docker-php-ext-enable xdebug
 
 RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
  

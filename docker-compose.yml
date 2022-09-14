@@ -8,11 +8,14 @@ services:
       - ./www:/var/www/html
       - ./conf/apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
       - ./conf/php/php.ini:/usr/local/etc/php/php.ini
+      - ./conf/apache/sites-enabled:/etc/apache2/sites-enabled
+      - ./conf/apache/sites-enabled:/etc/apache2/sites-available 
     ports:
-      - 22:22
+      - 88:88
     user: "root:root"
     extra_hosts:
       - "bx.doc:127.0.0.1"
+      - "wiki.doc:127.0.0.1"
     # dns_search:
     #   - bx.doc
     depends_on:
@@ -61,7 +64,7 @@ services:
       - mysql:db
     ports:
       - 8765:80
-    restart: always 
+    # restart: always 
     volumes:
      - /var/lib/mysql_data:/var/lib/mysql 
     environment:
