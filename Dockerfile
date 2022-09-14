@@ -62,7 +62,7 @@ RUN sed -i '/#!\/bin\/sh/aservice sendmail restart' /usr/local/bin/docker-php-en
 #RUN sed -i '/#!\/bin\/sh/aecho "$(hostname -i)\t$(hostname) $(hostname).localhost ${VIRTUAL_HOST}" >> /etc/hosts' /usr/local/bin/docker-php-entrypoint  
  
  
-#RUN pecl install && pecl install xdebug-2.8.1 && docker-php-ext-enable xdebug
+RUN pecl install && pecl install xdebug-2.8.1 && docker-php-ext-enable xdebug
 
 RUN apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
  
