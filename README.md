@@ -11,3 +11,12 @@ PHP Apache nginx PHPStorm xDebug localhost for bitrix bitrix24 development
 
 потом:
 `docker-compose up -d --build`
+
+
+в hosts прописать 
+
+127.0.01 bx.doc
+
+в папке windock/www создать дочернюю bx.doc
+
+залить в bx.doc сайт или тестовый скрипт для битрикс из папки windock/src
