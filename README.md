@@ -15,7 +15,7 @@ PHP Apache nginx PHPStorm xDebug localhost for bitrix bitrix24 development
 
 в hosts прописать 
 
-127.0.01 bx.doc
+127.0.0.1 bx.doc
 
 в папке windock/www создать дочернюю bx.doc
 
